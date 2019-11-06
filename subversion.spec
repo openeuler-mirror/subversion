@@ -5,10 +5,12 @@
 %global svn_python_sitearch %{python2_sitearch}
 %global svn_python %{__python2}
 
+%bcond_with java
+
 Summary: Subversion, a version control system.
 Name: subversion
 Version: 1.10.6
-Release: 1
+Release: 2
 License: ASL 2.0
 URL: https://subversion.apache.org/
 
@@ -66,6 +68,7 @@ Requires: subversion%{?_isa} = %{version}-%{release}
 %description -n perl-%{name}
 perl bindings to the subversion libraries
 
+%if %{with java}
 %package -n java-%{name}
 Summary:  java bindings to the subversion libraries
 Provides: %{name}-java = %{version}-%{release}
@@ -78,6 +81,7 @@ BuildArch: noarch
 
 %description -n java-%{name}
 java bindings to the subversion libraries
+%endif
 
 %package -n ruby-%{name}
 Summary: Ruby bindings to the Subversion libraries
@@ -116,14 +120,18 @@ export CC=gcc CXX=g++ JAVA_HOME=%{jdk_path}
         --disable-static --with-sasl=%{_prefix} \
         --with-libmagic=%{_prefix} \
         --with-gnome-keyring \
+%if %{with java}
         --enable-javahl \
         --with-junit=%{_prefix}/share/java/junit.jar \
+%endif
         --with-berkeley-db \
         || (cat config.log; exit 1)
 make %{?_smp_mflags} all tools
 make swig-py swig-py-lib %{swigdirs}
 make swig-pl swig-pl-lib swig-rb swig-rb-lib
+%if %{with java}
 make javahl
+%endif
 
 %install
 make install DESTDIR=$RPM_BUILD_ROOT
@@ -131,7 +139,10 @@ make install-swig-py %{swigdirs} DESTDIR=$RPM_BUILD_ROOT
 make install-swig-pl-lib install-swig-rb DESTDIR=$RPM_BUILD_ROOT
 make pure_vendor_install -C subversion/bindings/swig/perl/native \
         PERL_INSTALL_ROOT=$RPM_BUILD_ROOT
-make install-javahl-java install-javahl-lib javahl_javadir=%{_javadir} DESTDIR=$RPM_BUILD_ROOT
+%if %{with java}
+make install-javahl-java install-javahl-lib javahl_javadir=%{_javadir}
+%endif
+DESTDIR=$RPM_BUILD_ROOT
 
 install -m 755 -d ${RPM_BUILD_ROOT}%{_sysconfdir}/subversion
 
@@ -212,8 +223,9 @@ if ! make check-swig-py; then
    exit 1
 fi
 # check-swig-rb omitted: it runs svnserve
+%if %{with java}
 make check-javahl
-
+%endif
 
 %preun
 
@@ -237,9 +249,11 @@ make check-javahl
 
 %postun -n ruby-%{name} -p /sbin/ldconfig
 
+%if %{with java}
 %post -n java-%{name} -p /sbin/ldconfig
 
 %postun -n java-%{name} -p /sbin/ldconfig
+%endif
 
 %files -f %{name}.files
 %{!?_licensedir:%global license %%doc}
@@ -254,7 +268,9 @@ make check-javahl
 %{_libdir}/libsvn*.so.*
 %exclude %{_libdir}/libsvn_swig_perl*
 %exclude %{_libdir}/libsvn_swig_ruby*
+%if %{with java}
 %{_libdir}/libsvnjavahl-*.so
+%endif
 %doc tools/hook-scripts tools/backup tools/bdb tools/examples tools/xslt
 %{_libdir}/httpd/modules/mod_*.so
 
@@ -268,13 +284,15 @@ make check-javahl
 %{_libdir}/libsvn*.so
 %{_datadir}/pkgconfig/*.pc
 %exclude %{_libdir}/libsvn_swig_perl*
+%if %{with java}
 %exclude %{_libdir}/libsvnjavahl-*.so
+%endif
 
 %files help
 %{_mandir}/man*/*
 %exclude %{_mandir}/man*/*::*
 
-%files -n perl-%{name} 
+%files -n perl-%{name}
 %{perl_vendorarch}/auto/SVN
 %{perl_vendorarch}/SVN
 %{_libdir}/libsvn_swig_perl*
@@ -284,10 +302,18 @@ make check-javahl
 %{_libdir}/libsvn_swig_ruby*
 %{ruby_vendorarchdir}/svn
 
+%if %{with java}
 %files -n java-%{name}
 %{_javadir}/svn-javahl.jar
+%endif
 
 %changelog
+* Wed Oct 30 2019 chengquan<chengquan3@huawei.com> - 1.10.6-2
+- Type:bugfix
+- ID:NA
+- SUG:NA
+- DESC:remove junit require with java package
+
 * Tue Aug 27 2019 openEuler Buildteam <buildteam@openeuler.org> - 1.10.6-1
 - Package init
 
