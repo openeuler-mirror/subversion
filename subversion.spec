@@ -10,7 +10,7 @@
 Summary: Subversion, a version control system.
 Name: subversion
 Version: 1.10.6
-Release: 2
+Release: 3
 License: ASL 2.0
 URL: https://subversion.apache.org/
 
@@ -308,6 +308,9 @@ make check-javahl
 %endif
 
 %changelog
+* Mon May 18 2020 wangchen<wangchen137@huawei.com> - 1.10.6-3
+- rebuild for subversion
+
 * Wed Oct 30 2019 chengquan<chengquan3@huawei.com> - 1.10.6-2
 - Type:bugfix
 - ID:NA
