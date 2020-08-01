@@ -2,15 +2,15 @@
 
 %define perl_vendorarch %(eval "`%{__perl} -V:installvendorarch`"; echo $installvendorarch)
 
-%global svn_python_sitearch %{python2_sitearch}
-%global svn_python %{__python2}
+%global svn_python_sitearch %{python3_sitearch}
+%global svn_python %{__python3}
 
 %bcond_with java
 
 Summary: Subversion, a version control system.
 Name: subversion
-Version: 1.10.6
-Release: 2
+Version: 1.14.0
+Release: 1
 License: ASL 2.0
 URL: https://subversion.apache.org/
 
@@ -46,16 +46,16 @@ Development package for subversion.
 %package_help
 Requires: subversion = %{version}-%{release}
 
-%package -n python2-%{name}
-%{?python_provide:%python_provide python2-subversion}
+%package -n python3-%{name}
+%{?python_provide:%python_provide python3-subversion}
 Provides: %{name}-python = %{version}-%{release}
-Provides: python2-%{name} = %{version}-%{release}
+Provides: python3-%{name} = %{version}-%{release}
 Provides: %{name}-python%{?_isa} = %{version}-%{release}
-BuildRequires: python2-devel
-Summary:  python2 bindings to the subversion libraries
+BuildRequires: python3-devel py3c-devel
+Summary:  python3 bindings to the subversion libraries
 
-%description -n python2-%{name}
-python2 bindings to the subversion libraries
+%description -n python3-%{name}
+python3 bindings to the subversion libraries
 
 %package -n perl-%{name}
 Summary:  perl bindings to the subversion libraries
@@ -97,7 +97,9 @@ This package includes the Ruby bindings to the Subversion libraries.
 %autosetup -n %{name}-%{version} -S git
 
 %build
+mv build-outputs.mk build-outputs.mk.old
 export PYTHON=%{svn_python}
+touch build/generator/swig/*.py
 PATH=/usr/bin:$PATH ./autogen.sh --release
 
 perl -pi -e 's|/usr/bin/env perl -w|/usr/bin/perl -w|' tools/hook-scripts/*.pl.in
@@ -237,9 +239,9 @@ make check-javahl
 
 %postun devel -p /sbin/ldconfig
 
-%post -n python2-%{name} -p /sbin/ldconfig
+%post -n python3-%{name} -p /sbin/ldconfig
 
-%postun -n python2-%{name} -p /sbin/ldconfig
+%postun -n python3-%{name} -p /sbin/ldconfig
 
 %post -n perl-%{name} -p /sbin/ldconfig
 
@@ -274,9 +276,9 @@ make check-javahl
 %doc tools/hook-scripts tools/backup tools/bdb tools/examples tools/xslt
 %{_libdir}/httpd/modules/mod_*.so
 
-%files -n python2-subversion
-%{python2_sitearch}/svn
-%{python2_sitearch}/libsvn
+%files -n python3-subversion
+%{python3_sitearch}/svn
+%{python3_sitearch}/libsvn
 
 %files devel
 %{_includedir}/subversion-1
@@ -308,6 +310,12 @@ make check-javahl
 %endif
 
 %changelog
+* Sat Aug 1 2020 yang_zhuang_zhuang<yangzhuangzhuang1@huawei.com> - 1.14.0-1
+- Type:enhancement
+- ID:NA
+- SUG:NA
+- DESC:update version to 1.14.0
+
 * Wed Oct 30 2019 chengquan<chengquan3@huawei.com> - 1.10.6-2
 - Type:bugfix
 - ID:NA
