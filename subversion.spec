@@ -10,11 +10,13 @@
 Summary: Subversion, a version control system.
 Name: subversion
 Version: 1.12.2
-Release: 2
+Release: 3
 License: ASL 2.0
 URL: https://subversion.apache.org/
 
 Source0: https://www.apache.org/dist/subversion/subversion-%{version}.tar.bz2
+
+Patch1: backport-CVE-2020-17525.patch
 
 BuildRequires: autoconf libtool texinfo which swig gettext  apr-devel apr-util-devel libserf-devel cyrus-sasl-devel sqlite-devel file-devel utf8proc-devel lz4-devel apr-util-openssl dbus-devel, libsecret-devel httpd-devel git
 Requires: httpd
@@ -308,6 +310,9 @@ make check-javahl
 %endif
 
 %changelog
+* Tue Feb 23 2021 yixiangzhike<zhangxingliang3@huawei.com> - 1.12.2-3
+- fix CVE-2020-17525
+
 * Fri Jan 8 2021 wangchen<wangchen137@huawei.com> - 1.12.2-2
 - dismiss the dependence of libdb
 
