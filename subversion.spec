@@ -10,7 +10,7 @@
 Summary: Subversion, a version control system.
 Name: subversion
 Version: 1.14.0
-Release: 2
+Release: 3
 License: ASL 2.0
 URL: https://subversion.apache.org/
 
@@ -18,7 +18,7 @@ Source0: https://www.apache.org/dist/subversion/subversion-%{version}.tar.bz2
 
 Patch1: backport-CVE-2020-17525.patch
 
-BuildRequires: autoconf libtool texinfo which swig gettext libdb-devel apr-devel apr-util-devel libserf-devel cyrus-sasl-devel sqlite-devel file-devel utf8proc-devel lz4-devel apr-util-openssl dbus-devel, libsecret-devel httpd-devel git
+BuildRequires: autoconf libtool texinfo which swig gettext apr-devel apr-util-devel libserf-devel cyrus-sasl-devel sqlite-devel file-devel utf8proc-devel lz4-devel apr-util-openssl dbus-devel, libsecret-devel httpd-devel git
 Requires: httpd
 
 Provides: svn
@@ -128,7 +128,7 @@ export CC=gcc CXX=g++ JAVA_HOME=%{jdk_path}
         --enable-javahl \
         --with-junit=%{_prefix}/share/java/junit.jar \
 %endif
-        --with-berkeley-db \
+        --without-berkeley-db \
         || (cat config.log; exit 1)
 make %{?_smp_mflags} all tools
 make swig-py swig-py-lib %{swigdirs}
@@ -312,6 +312,9 @@ make check-javahl
 %endif
 
 %changelog
+* Sat Jun 19 2021 panxiaohe<panxiaohe@huawei.com> - 1.14.0-3
+- dismiss the dependence of libdb
+
 * Mon Feb 22 2021 yixiangzhike<zhangxingliang3@huawei.com> - 1.14.0-2
 - Type:bugfix
 - ID:NA
