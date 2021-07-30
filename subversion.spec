@@ -10,7 +10,7 @@
 Summary: Subversion, a version control system.
 Name: subversion
 Version: 1.14.0
-Release: 3
+Release: 4
 License: ASL 2.0
 URL: https://subversion.apache.org/
 
@@ -18,7 +18,7 @@ Source0: https://www.apache.org/dist/subversion/subversion-%{version}.tar.bz2
 
 Patch1: backport-CVE-2020-17525.patch
 
-BuildRequires: autoconf libtool texinfo which swig gettext apr-devel apr-util-devel libserf-devel cyrus-sasl-devel sqlite-devel file-devel utf8proc-devel lz4-devel apr-util-openssl dbus-devel, libsecret-devel httpd-devel git
+BuildRequires: autoconf libtool texinfo which swig gettext apr-devel apr-util-devel libserf-devel cyrus-sasl-devel sqlite-devel file-devel utf8proc-devel lz4-devel apr-util-openssl dbus-devel, libsecret-devel httpd-devel 
 Requires: httpd
 
 Provides: svn
@@ -96,7 +96,7 @@ Requires: subversion%{?_isa} = %{version}-%{release}
 This package includes the Ruby bindings to the Subversion libraries.
 
 %prep
-%autosetup -n %{name}-%{version} -S git
+%autosetup -n %{name}-%{version} -p1
 
 %build
 mv build-outputs.mk build-outputs.mk.old
@@ -312,6 +312,9 @@ make check-javahl
 %endif
 
 %changelog
+* Fri Jul 30 2021 chenyanpanHW <chenyanpan@huawei.com> - 1.14.0-4
+- DESC: delete -S git from %autosetup, and delete BuildRequires git
+
 * Sat Jun 19 2021 panxiaohe<panxiaohe@huawei.com> - 1.14.0-3
 - dismiss the dependence of libdb
 
