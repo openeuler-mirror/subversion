@@ -10,7 +10,7 @@
 Summary: Subversion, a version control system.
 Name: subversion
 Version: 1.14.0
-Release: 3
+Release: 4
 License: ASL 2.0
 URL: https://subversion.apache.org/
 
@@ -18,7 +18,7 @@ Source0: https://www.apache.org/dist/subversion/subversion-%{version}.tar.bz2
 
 Patch1: backport-CVE-2020-17525.patch
 
-BuildRequires: autoconf libtool texinfo which swig gettext apr-devel apr-util-devel libserf-devel cyrus-sasl-devel sqlite-devel file-devel utf8proc-devel lz4-devel apr-util-openssl dbus-devel, libsecret-devel httpd-devel git
+BuildRequires: autoconf libtool texinfo which swig gettext apr-devel apr-util-devel libserf-devel cyrus-sasl-devel sqlite-devel file-devel utf8proc-devel lz4-devel apr-util-openssl dbus-devel, libsecret-devel httpd-devel git chrpath
 Requires: httpd
 
 Provides: svn
@@ -207,6 +207,12 @@ done | tee tools.files | sed 's/^/%%exclude /' > exclude.tools.files
 
 cat %{name}.lang exclude.tools.files >> %{name}.files
 
+#remove rpath
+chrpath -d $RPM_BUILD_ROOT%{_bindir}/{svn,svnadmin,svndumpfilter,svnfsfs,svnlook,svnrdump,svnserve,svnsync,svnversion}
+
+mkdir -p $RPM_BUILD_ROOT/etc/ld.so.conf.d
+echo "%{_libdir}" > $RPM_BUILD_ROOT/etc/ld.so.conf.d/%{name}-%{_arch}.conf
+
 %check
 export LANG=C LC_ALL=C
 export LD_LIBRARY_PATH=$RPM_BUILD_ROOT%{_libdir}
@@ -277,6 +283,7 @@ make check-javahl
 %endif
 %doc tools/hook-scripts tools/backup tools/bdb tools/examples tools/xslt
 %{_libdir}/httpd/modules/mod_*.so
+%config(noreplace) /etc/ld.so.conf.d/*
 
 %files -n python3-subversion
 %{python3_sitearch}/svn
@@ -312,6 +319,9 @@ make check-javahl
 %endif
 
 %changelog
+* Mon Sep 6 2021 panxiaohe<panxiaohe@huawei.com> - 1.14.0-4
+- remove rpath and runpath of exec files and libraries
+
 * Sat Jun 19 2021 panxiaohe<panxiaohe@huawei.com> - 1.14.0-3
 - dismiss the dependence of libdb
 
