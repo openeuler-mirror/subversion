@@ -10,7 +10,7 @@
 Summary: Subversion, a version control system.
 Name: subversion
 Version: 1.14.0
-Release: 4
+Release: 5
 License: ASL 2.0
 URL: https://subversion.apache.org/
 
@@ -131,10 +131,10 @@ export CC=gcc CXX=g++ JAVA_HOME=%{jdk_path}
         --without-berkeley-db \
         || (cat config.log; exit 1)
 make %{?_smp_mflags} all tools
-make swig-py swig-py-lib %{swigdirs}
-make swig-pl swig-pl-lib swig-rb swig-rb-lib
+make %{?_smp_mflags} swig-py swig-py-lib %{swigdirs}
+make %{?_smp_mflags} swig-pl swig-pl-lib swig-rb swig-rb-lib
 %if %{with java}
-make javahl
+make %{?_smp_mflags} javahl
 %endif
 
 %install
@@ -312,6 +312,9 @@ make check-javahl
 %endif
 
 %changelog
+* Fri Oct 15 2021 zhangweiguo <zhangweiguo2@huawei.com> - 1.14.0-5
+- set make parallelization
+
 * Fri Jul 30 2021 chenyanpanHW <chenyanpan@huawei.com> - 1.14.0-4
 - DESC: delete -S git from %autosetup, and delete BuildRequires git
 
