@@ -1,0 +1,19 @@
+
+Use the minor version as the revision in the libtool version, so the library
+soversion is not always 0.0.0.  (Does not influence the soname)
+
+--- subversion-1.14.0/configure.ac.soversion
++++ subversion-1.14.0/configure.ac
+@@ -112,7 +112,11 @@
+   SVN_APR_MAJOR_VERSION=1
+ fi
+ AC_SUBST(SVN_APR_MAJOR_VERSION)
+-SVN_LT_SOVERSION="-version-info $svn_lib_ver"
++
++m4_define([svn_ver_minor], m4_bpatsubst(AC_PACKAGE_VERSION, [[0-9]*\.\([0-9]*\)\.[0-9]*], [\1]))
++
++SVN_LT_SOVERSION="-version-info $svn_lib_ver:svn_ver_minor"
++AC_MSG_NOTICE([SVN_LT_SOVERSION $SVN_LT_SOVERSION])
+ AC_SUBST(SVN_LT_SOVERSION)
+ AC_DEFINE_UNQUOTED(SVN_SOVERSION, $svn_lib_ver,
+                    [Subversion library major verson])

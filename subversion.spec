@@ -9,14 +9,18 @@
 
 Summary: Subversion, a version control system.
 Name: subversion
-Version: 1.14.0
-Release: 5
+Version: 1.14.1
+Release: 1
 License: ASL 2.0
 URL: https://subversion.apache.org/
 
 Source0: https://www.apache.org/dist/subversion/subversion-%{version}.tar.bz2
 
-Patch1: backport-CVE-2020-17525.patch
+Patch0: subversion-1.12.0-linking.patch
+Patch1: subversion-1.14.0-testwarn.patch
+Patch2: subversion-1.14.0-soversion.patch
+Patch3: subversion-1.8.0-rubybind.patch
+Patch4: subversion-1.8.5-swigplWall.patch
 
 BuildRequires: autoconf libtool texinfo which swig gettext apr-devel apr-util-devel libserf-devel cyrus-sasl-devel sqlite-devel file-devel utf8proc-devel lz4-devel apr-util-openssl dbus-devel, libsecret-devel httpd-devel 
 Requires: httpd
@@ -312,6 +316,12 @@ make check-javahl
 %endif
 
 %changelog
+* Tue Dec 28 2021 fuanan <fuanan3@huawei.com> - 1.14.1-1
+- Type:enhancement
+- ID:NA
+- SUG:NA
+- DESC:update version to 1.14.1
+
 * Fri Oct 15 2021 zhangweiguo <zhangweiguo2@huawei.com> - 1.14.0-5
 - set make parallelization
 
