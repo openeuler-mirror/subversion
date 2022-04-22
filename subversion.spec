@@ -10,7 +10,7 @@
 Summary: Subversion, a version control system.
 Name: subversion
 Version: 1.14.1
-Release: 1
+Release: 2
 License: ASL 2.0
 URL: https://subversion.apache.org/
 
@@ -21,6 +21,8 @@ Patch1: subversion-1.14.0-testwarn.patch
 Patch2: subversion-1.14.0-soversion.patch
 Patch3: subversion-1.8.0-rubybind.patch
 Patch4: subversion-1.8.5-swigplWall.patch
+Patch5: backport-CVE-2021-28544.patch
+Patch6: backport-CVE-2022-24070.patch
 
 BuildRequires: autoconf libtool texinfo which swig gettext apr-devel apr-util-devel libserf-devel cyrus-sasl-devel sqlite-devel file-devel utf8proc-devel lz4-devel apr-util-openssl dbus-devel, libsecret-devel httpd-devel 
 Requires: httpd
@@ -316,6 +318,9 @@ make check-javahl
 %endif
 
 %changelog
+* Fri Apr 22 2022 panxiaohe<panxh.life@foxmail.com> - 1.14.1-2
+- fix CVE-2021-28544 CVE-2022-24070
+
 * Tue Dec 28 2021 fuanan <fuanan3@huawei.com> - 1.14.1-1
 - Type:enhancement
 - ID:NA
