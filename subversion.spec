@@ -10,7 +10,7 @@
 Summary: Subversion, a version control system.
 Name: subversion
 Version: 1.12.2
-Release: 4
+Release: 5
 License: Public Domain and BSD and Apache-2.0 and BSL-1.0 and MIT
 URL: https://subversion.apache.org/
 
@@ -267,8 +267,6 @@ make check-javahl
 %{_bindir}/*
 %{_datadir}/bash-completion/
 %dir %{_sysconfdir}/subversion
-%{!?_licensedir:%global license %%doc}
-%license LICENSE NOTICE
 %{_libdir}/libsvn*.so.*
 %exclude %{_libdir}/libsvn_swig_perl*
 %exclude %{_libdir}/libsvn_swig_ruby*
@@ -312,6 +310,9 @@ make check-javahl
 %endif
 
 %changelog
+* Fri Feb 03 2023 fuanan <fuanan3@h-partners.com> - 1.12.2-5
+- Fix compile warning: LICENSE and NOTICE files are repeat packed
+
 * Fri Apr 22 2022 panxiaohe<panxh.life@foxmail.com> - 1.12.2-4
 - fix CVE-2021-28544 CVE-2022-24070
 
