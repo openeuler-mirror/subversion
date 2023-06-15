@@ -1,0 +1,28 @@
+--- a/Makefile.in	2023-06-15 14:28:03.234893300 +0800
++++ b/Makefile.in	2023-06-15 16:23:07.904443900 +0800
+@@ -149,14 +149,14 @@
+
+ SWIG = @SWIG@
+ SWIG_PY_INCLUDES = @SWIG_PY_INCLUDES@ @SVN_PY3C_INCLUDES@ -I$(SWIG_SRC_DIR)/python/libsvn_swig_py
+-SWIG_PY_COMPILE = @SWIG_PY_COMPILE@
++SWIG_PY_COMPILE = @CC@
+ SWIG_PY_LINK = @SWIG_PY_LINK@
+ SWIG_PY_LIBS = @SWIG_PY_LIBS@
+ SWIG_PY_ERRMSG = @SWIG_PY_ERRMSG@
+ SWIG_PL_INCLUDES = @SWIG_PL_INCLUDES@
+ SWIG_PL_ERRMSG = @SWIG_PL_ERRMSG@
+ SWIG_RB_INCLUDES = @SWIG_RB_INCLUDES@ -I$(SWIG_SRC_DIR)/ruby/libsvn_swig_ruby
+-SWIG_RB_COMPILE = @SWIG_RB_COMPILE@
++SWIG_RB_COMPILE = @CC@
+ SWIG_RB_LINK = @SWIG_RB_LINK@
+ SWIG_RB_LIBS = @SWIG_RB_LIBS@
+ SWIG_RB_SITE_LIB_DIR = @SWIG_RB_SITE_LIB_DIR@
+@@ -306,7 +306,7 @@
+ 
+ # Compilation of SWIG-generated C source code
+ COMPILE_PY_WRAPPER = $(LIBTOOL) $(LTFLAGS) --mode=compile $(SWIG_PY_COMPILE) $(LT_CFLAGS) $(CPPFLAGS) $(SWIG_PY_INCLUDES) -prefer-pic -c -o $@
+-COMPILE_RB_WRAPPER = $(LIBTOOL) $(LTFLAGS) --mode=compile $(SWIG_RB_COMPILE) $(LT_CFLAGS) $(CPPFLAGS) $(SWIG_RB_INCLUDES) -prefer-pic -c -o $@
++COMPILE_RB_WRAPPER = $(LIBTOOL) $(LTFLAGS) --mode=compile $(SWIG_RB_COMPILE) $(LT_CFLAGS) $(CPPFLAGS) -Wno-error=int-conversion $(SWIG_RB_INCLUDES) -prefer-pic -c -o $@
+ 
+ # these commands link the wrapper objects into an extension library/module
+ LINK_PY_WRAPPER = $(LIBTOOL) $(LTFLAGS) --mode=link $(SWIG_PY_LINK) $(SWIG_LDFLAGS) -rpath $(swig_pydir) -avoid-version -module
