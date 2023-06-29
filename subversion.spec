@@ -10,7 +10,7 @@
 Summary: Subversion, a version control system.
 Name: subversion
 Version: 1.14.2
-Release: 2
+Release: 3
 License: ASL 2.0
 URL: https://subversion.apache.org/
 
@@ -21,6 +21,7 @@ Patch1: subversion-1.14.0-testwarn.patch
 Patch2: subversion-1.14.0-soversion.patch
 Patch3: subversion-1.8.0-rubybind.patch
 Patch4: subversion-1.8.5-swigplWall.patch
+Patch5: subversion-1.14.2-fix-build-errors.patch
 
 BuildRequires: autoconf libtool texinfo which swig gettext apr-devel apr-util-devel libserf-devel cyrus-sasl-devel sqlite-devel file-devel utf8proc-devel lz4-devel apr-util-openssl dbus-devel, libsecret-devel httpd-devel 
 Requires: httpd
@@ -116,7 +117,7 @@ export svn_cv_ruby_sitedir_libsuffix=""
 export svn_cv_ruby_sitedir_archsuffix=""
 
 export APACHE_LDFLAGS="-Wl,-z,relro,-z,now"
-export CC=gcc CXX=g++ JAVA_HOME=%{jdk_path}
+export CC=%toolchain CXX=%toolchain JAVA_HOME=%{jdk_path}
 
 %configure --with-apr=%{_prefix} --with-apr-util=%{_prefix} \
         --disable-debug \
@@ -314,6 +315,11 @@ make check-javahl
 %endif
 
 %changelog
+* Thu Jun 15 2023 Xiaoya Huang <huangxiaoya@iscas.ac.cn> - 1.14.2-3
+- Correct the incorrect CC and CXX compiler specified in the spec file
+- Add warning options to suppress warnings
+- Make "SWIG_PY_COMPILE" and "SWIG_RB_COMPILE" in the file "Makefile.in" to depend on the toolchain, instead of being resolved as a GCC compiler
+
 * Fri Feb 03 2023 fuanan <fuanan3@h-partners.com> - 1.14.2-2
 - Fix compile warning: LICENSE and NOTICE files are repeat packed
 
